@@ -12,8 +12,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.plantify.plantify_app.R
 import com.plantify.plantify_app.ui.home.HomeActivity
 import com.plantify.plantify_app.ui.register.RegisterActivity
-import kotlin.onFailure
-import kotlin.onSuccess
 
 class LoginActivity : AppCompatActivity() {
 
