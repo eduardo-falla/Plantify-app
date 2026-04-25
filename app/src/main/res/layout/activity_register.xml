@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/green_surface"
-    tools:context=".ui.RegisterActivity">
+    tools:context=".ui.register.RegisterActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -16,17 +16,27 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etNombreRegister"
+            android:hint="Nombre completo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
+
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEmailRegister"
             android:hint="Correo electrónico"
+            android:inputType="textEmailAddress"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPasswordRegister"
             android:hint="Contraseña"
             android:inputType="textPassword"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"/>
 
         <Button
             android:id="@+id/btnRegister"
@@ -34,7 +44,7 @@
             android:layout_width="match_parent"
             android:backgroundTint="@color/green_primary"
             android:layout_height="wrap_content"/>
-    </LinearLayout>
 
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

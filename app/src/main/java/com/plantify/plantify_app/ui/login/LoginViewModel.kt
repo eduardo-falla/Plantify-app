@@ -5,15 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plantify.plantify_app.data.AuthRepository
-import com.plantify.plantify_app.model.User
+import com.plantify.plantify_app.model.Usuario
 import kotlinx.coroutines.launch
 
 class LoginViewModel : ViewModel() {
 
     private val repository = AuthRepository()
 
-    private val _loginState = MutableLiveData<Result<User>>()
-    val loginState: LiveData<Result<User>> = _loginState
+    private val _loginState = MutableLiveData<Result<Usuario>>()
+    val loginState: LiveData<Result<Usuario>> = _loginState
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -21,7 +21,6 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-    // 🆕 Login con Google
     fun loginWithGoogle(idToken: String) {
         viewModelScope.launch {
             _loginState.value = repository.loginWithGoogle(idToken)

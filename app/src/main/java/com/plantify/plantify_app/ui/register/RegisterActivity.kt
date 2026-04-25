@@ -20,22 +20,23 @@ class RegisterActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
 
+        val etNombre   = findViewById<TextInputEditText>(R.id.etNombreRegister)
         val etEmail    = findViewById<TextInputEditText>(R.id.etEmailRegister)
         val etPassword = findViewById<TextInputEditText>(R.id.etPasswordRegister)
         val btnRegister = findViewById<Button>(R.id.btnRegister)
 
         btnRegister.setOnClickListener {
+            val nombre   = etNombre.text.toString().trim()
             val email    = etEmail.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.register(email, password)
+            if (nombre.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
+                viewModel.register(email, password, nombre)
             } else {
                 Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
             }
         }
 
-        // 👁 Observar resultado del registro
         viewModel.registerState.observe(this) { result ->
             result.onSuccess {
                 Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
