@@ -17,8 +17,14 @@ class LoginViewModel : ViewModel() {
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
-            val result = repository.login(email, password)
-            _loginState.value = result
+            _loginState.value = repository.login(email, password)
+        }
+    }
+
+    // 🆕 Login con Google
+    fun loginWithGoogle(idToken: String) {
+        viewModelScope.launch {
+            _loginState.value = repository.loginWithGoogle(idToken)
         }
     }
 }
