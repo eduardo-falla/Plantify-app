@@ -14,13 +14,14 @@
         android:orientation="horizontal"
         android:padding="12dp">
 
+        <!-- Imagen -->
         <androidx.cardview.widget.CardView
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
             <ImageView
-                android:id="@+id/ivCartItemImage"
+                android:id="@+id/ivPlant"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -34,34 +35,39 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
+            <!-- Nombre + botón eliminar -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
-                    android:id="@+id/tvCartItemName"
+                    android:id="@+id/tvName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nombre Planta"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
-                <ImageView
+                <ImageButton
+                    android:id="@+id/btnRemove"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_alignParentEnd="true"
+                    android:background="@null"
                     android:src="@android:drawable/ic_menu_delete"
+                    android:contentDescription="Eliminar"
                     app:tint="#EF4444" />
             </RelativeLayout>
 
+            <!-- Precio unitario -->
             <TextView
-                android:id="@+id/tvCartItemScientific"
+                android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Scientific name"
+                android:text="S/ 0.00"
                 android:textColor="@color/gray_medium"
-                android:textSize="12sp"
-                android:fontStyle="italic" />
+                android:textSize="12sp" />
 
+            <!-- Controles cantidad + precio total -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,26 +79,53 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_category_card"
-                    android:paddingHorizontal="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="4dp"
                     android:paddingVertical="4dp">
+
+                    <ImageButton
+                        android:id="@+id/btnDecrease"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="@null"
+                        android:src="@android:drawable/ic_input_delete"
+                        android:contentDescription="Disminuir" />
+
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvQuantity"
+                        android:layout_width="32dp"
                         android:layout_height="wrap_content"
-                        android:text=" -  1  + "
+                        android:gravity="center"
+                        android:text="1"
                         android:textColor="@color/text_primary"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
+
+                    <ImageButton
+                        android:id="@+id/btnIncrease"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:background="@null"
+                        android:src="@android:drawable/ic_input_add"
+                        android:contentDescription="Aumentar" />
                 </LinearLayout>
 
-                <View android:layout_width="0dp" android:layout_height="0dp" android:layout_weight="1" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
+                <!-- Precio total del item -->
                 <TextView
-                    android:id="@+id/tvCartItemPrice"
+                    android:id="@+id/tvTotalItem"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$45.99"
+                    android:text="S/ 0.00"
                     android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
