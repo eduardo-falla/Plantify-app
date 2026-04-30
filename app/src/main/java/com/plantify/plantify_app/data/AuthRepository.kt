@@ -1,39 +1,84 @@
 package com.plantify.plantify_app.data
 
 import com.google.firebase.auth.FirebaseAuth
-import com.plantify.plantify_app.model.User
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.plantify.plantify_app.model.Usuario
 import kotlinx.coroutines.tasks.await
 
 class AuthRepository {
 
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
+    private val usuariosRef = db.collection("usuarios")
 
-    suspend fun login(email: String, password: String): Result<User> {
+    suspend fun login(email: String, password: String): Result<Usuario> {
         return try {
             val result = auth.signInWithEmailAndPassword(email, password).await()
             val firebaseUser = result.user!!
-            Result.success(User(uid = firebaseUser.uid, email = firebaseUser.email ?: ""))
+            val usuario = obtenerUsuarioFirestore(firebaseUser.uid)
+            Result.success(usuario)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-    suspend fun register(email: String, password: String): Result<User> {
+    // 🆕 nombre como parámetro
+    suspend fun register(email: String, password: String, nombre: String): Result<Usuario> {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
             val firebaseUser = result.user!!
-            Result.success(User(uid = firebaseUser.uid, email = firebaseUser.email ?: ""))
+            val usuario = Usuario(
+                uid = firebaseUser.uid,
+                email = firebaseUser.email ?: "",
+                nombre = nombre,
+                fotoPerfil = "",
+                rol = "comprador"
+            )
+            usuariosRef.document(usuario.uid).set(usuario).await()
+            Result.success(usuario)
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    suspend fun loginWithGoogle(idToken: String): Result<Usuario> {
+        return try {
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            val result = auth.signInWithCredential(credential).await()
+            val firebaseUser = result.user!!
+
+            val doc = usuariosRef.document(firebaseUser.uid).get().await()
+            val usuario = if (doc.exists()) {
+                doc.toObject(Usuario::class.java)!!
+            } else {
+                val nuevoUsuario = Usuario(
+                    uid = firebaseUser.uid,
+                    email = firebaseUser.email ?: "",
+                    nombre = firebaseUser.displayName ?: "",
+                    fotoPerfil = firebaseUser.photoUrl?.toString() ?: "",
+                    rol = "comprador"
+                )
+                usuariosRef.document(nuevoUsuario.uid).set(nuevoUsuario).await()
+                nuevoUsuario
+            }
+            Result.success(usuario)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private suspend fun obtenerUsuarioFirestore(uid: String): Usuario {
+        val doc = usuariosRef.document(uid).get().await()
+        return doc.toObject(Usuario::class.java) ?: Usuario(uid = uid)
     }
 
     fun logout() {
         auth.signOut()
     }
 
-    fun getCurrentUser(): User? {
+    fun getCurrentUser(): Usuario? {
         val firebaseUser = auth.currentUser ?: return null
-        return User(uid = firebaseUser.uid, email = firebaseUser.email ?: "")
+        return Usuario(uid = firebaseUser.uid, email = firebaseUser.email ?: "")
     }
 }

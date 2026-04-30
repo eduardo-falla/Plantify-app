@@ -12,7 +12,12 @@
           "package_name": "com.plantify.plantify_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "787003937927-2vlljbd5akmurakfpdhf0net5hu4vdkm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD_WZ18MdXK_gPkk3eh8-06JSVaZvrZgwk"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787003937927-2vlljbd5akmurakfpdhf0net5hu4vdkm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
