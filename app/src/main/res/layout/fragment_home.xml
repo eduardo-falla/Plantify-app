@@ -29,7 +29,7 @@
                     android:id="@+id/tvGreeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="¡Hola, María!"
+                    android:text="¡Hola!"
                     android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -51,6 +51,7 @@
                 app:tint="@color/white" />
         </RelativeLayout>
 
+        <!-- Barra de búsqueda clickeable -->
         <LinearLayout
             android:id="@+id/searchBarClickable"
             android:layout_width="match_parent"
@@ -140,27 +141,50 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- ══════ CHIPS DE CATEGORÍAS ══════ -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:text="Categorías Populares"
+                android:layout_marginBottom="8dp"
+                android:text="Categorías"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <GridLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCategories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:columnCount="2"
-                android:rowCount="2">
-                <include layout="@layout/item_category_simple" />
-                <include layout="@layout/item_category_simple" />
-                <include layout="@layout/item_category_simple" />
-                <include layout="@layout/item_category_simple" />
-            </GridLayout>
+                android:clipToPadding="false"
+                android:paddingHorizontal="16dp"
+                android:paddingBottom="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
+            <!-- ══════ LOADING ══════ -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:indeterminateTint="@color/green_primary"
+                android:visibility="gone"/>
+
+            <!-- ══════ ESTADO VACÍO ══════ -->
+            <TextView
+                android:id="@+id/tvEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="32dp"
+                android:text="No hay plantas disponibles 🌿"
+                android:textColor="@color/gray_medium"
+                android:textSize="15sp"
+                android:visibility="gone"/>
+
+            <!-- ══════ PLANTAS RECOMENDADAS ══════ -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -170,7 +194,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Recomendados para ti"
+                    android:text="Plantas disponibles"
                     android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -186,18 +210,20 @@
                     android:focusable="true"/>
             </RelativeLayout>
 
+            <!-- RecyclerView plantas — ahora en GRID de 2 columnas -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecommended"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:clipToPadding="false"
-                android:orientation="horizontal"
-                android:paddingHorizontal="16dp"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:paddingHorizontal="8dp"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
                 tools:listitem="@layout/item_plant_card" />
 
-            <!-- Consejo -->
+            <!-- Consejo del día -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -225,6 +251,8 @@
                         android:textSize="13sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

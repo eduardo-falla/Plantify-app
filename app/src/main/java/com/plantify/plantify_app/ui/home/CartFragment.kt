@@ -19,19 +19,19 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rvCartItems   = view.findViewById<RecyclerView>(R.id.rvCartItems)
-        val tvTotal       = view.findViewById<TextView>(R.id.tvTotal)
-        val tvSubtotal    = view.findViewById<TextView>(R.id.tvSubtotal)
-        val tvCartCount   = view.findViewById<TextView>(R.id.tvCartCount)
-        val btnCheckout   = view.findViewById<Button>(R.id.btnCheckout)
-        val progressBar   = view.findViewById<ProgressBar>(R.id.progressBar)
-        val tvEmpty       = view.findViewById<TextView>(R.id.tvEmpty)
-        val rvCart        = view.findViewById<View>(R.id.rvCart)
+        val rvCartItems  = view.findViewById<RecyclerView>(R.id.rvCartItems)
+        val tvTotal      = view.findViewById<TextView>(R.id.tvTotal)
+        val tvSubtotal   = view.findViewById<TextView>(R.id.tvSubtotal)
+        val tvCartCount  = view.findViewById<TextView>(R.id.tvCartCount)
+        val btnCheckout  = view.findViewById<Button>(R.id.btnCheckout)
+        val progressBar  = view.findViewById<ProgressBar>(R.id.progressBar)
+        val tvEmpty      = view.findViewById<TextView>(R.id.tvEmpty)
+        val rvCart       = view.findViewById<View>(R.id.rvCart)
 
         val SHIPPING = 5.99
 
         adapter = CartAdapter(
-            items = emptyList(),
+            items      = emptyList(),
             onIncrease = { item -> viewModel.updateQuantity(item.id, item.quantity + 1) },
             onDecrease = { item -> viewModel.updateQuantity(item.id, item.quantity - 1) },
             onRemove   = { item -> viewModel.removeItem(item.id) }
@@ -42,11 +42,9 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
 
         viewModel.cartItems.observe(viewLifecycleOwner) { items ->
             adapter.updateItems(items)
-
             val isEmpty = items.isEmpty()
-            tvEmpty.visibility   = if (isEmpty) View.VISIBLE else View.GONE
-            rvCart.visibility    = if (isEmpty) View.GONE else View.VISIBLE
-
+            tvEmpty.visibility  = if (isEmpty) View.VISIBLE else View.GONE
+            rvCart.visibility   = if (isEmpty) View.GONE    else View.VISIBLE
             val count = items.sumOf { it.quantity }
             tvCartCount.text = "$count ${if (count == 1) "artículo" else "artículos"}"
         }
@@ -61,10 +59,34 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             progressBar.visibility = if (loading) View.VISIBLE else View.GONE
         }
 
+        // ── Botón pagar → abre CheckoutActivity ──────────────
         btnCheckout.setOnClickListener {
-            // Aquí conectar el flujo de pago
+            val items = viewModel.cartItems.value
+            if (items.isNullOrEmpty()) {
+                android.widget.Toast.makeText(
+                    requireContext(),
+                    "Tu carrito está vacío",
+                    android.widget.Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+            val intent = android.content.Intent(
+                requireContext(),
+                CheckoutActivity::class.java
+            )
+            // Pasa el total al checkout
+            val subtotal = viewModel.total.value ?: 0.0
+            intent.putExtra("subtotal", subtotal)
+            intent.putExtra("total", subtotal + SHIPPING)
+            startActivity(intent)
         }
 
+        viewModel.loadCart()
+    }
+
+    // Recarga el carrito al volver de Checkout
+    override fun onResume() {
+        super.onResume()
         viewModel.loadCart()
     }
 }

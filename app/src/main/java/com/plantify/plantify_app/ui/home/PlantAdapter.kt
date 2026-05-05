@@ -40,6 +40,17 @@ class PlantAdapter(
             .centerCrop()
             .into(holder.ivPlant)
 
+        // Toca la tarjeta → abre detalle
+        holder.itemView.setOnClickListener {
+            val intent = android.content.Intent(
+                holder.itemView.context,
+                PlantDetailActivity::class.java
+            )
+            intent.putExtra("plantaId", plant.plantaId)
+            holder.itemView.context.startActivity(intent)
+        }
+
+        // Botón "Añadir" → agrega directo al carrito
         holder.btnAdd.setOnClickListener { onAddToCart(plant) }
     }
 
