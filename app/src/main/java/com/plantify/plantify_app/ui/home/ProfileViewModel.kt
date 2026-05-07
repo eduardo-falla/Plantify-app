@@ -18,11 +18,36 @@ class ProfileViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _cuentaEliminada = MutableLiveData<Boolean>()
+    val cuentaEliminada: LiveData<Boolean> = _cuentaEliminada
+
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
     fun loadProfile() {
         viewModelScope.launch {
             _isLoading.value = true
             val user = authRepository.getCurrentUserFull()
             user?.let { _usuario.value = it }
+            _isLoading.value = false
+        }
+    }
+
+    fun eliminarCuenta() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            val uid = authRepository.getCurrentUser()?.uid ?: run {
+                _error.value = "Usuario no autenticado"
+                _isLoading.value = false
+                return@launch
+            }
+            authRepository.eliminarCuenta(uid)
+                .onSuccess {
+                    _cuentaEliminada.value = true
+                }
+                .onFailure {
+                    _error.value = "Error al eliminar cuenta: ${it.message}"
+                }
             _isLoading.value = false
         }
     }

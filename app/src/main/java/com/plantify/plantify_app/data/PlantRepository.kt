@@ -12,8 +12,21 @@ class PlantRepository {
     suspend fun getPlants(): Result<List<Plant>> {
         return try {
             val snapshot = plantasRef.get().await()
-            val plants = snapshot.documents.mapNotNull {
-                it.toObject(Plant::class.java)?.copy(plantaId = it.id)
+            val plants = snapshot.documents.mapNotNull { doc ->
+                try {
+                    Plant(
+                        plantaId    = doc.id,
+                        nombre      = doc.getString("nombre") ?: "",
+                        descripcion = doc.getString("descripcion") ?: "",
+                        cuidados    = doc.getString("cuidados") ?: "",
+                        precio      = doc.getDouble("precio") ?: 0.0,
+                        imagenUrl   = doc.getString("imagenUrl") ?: "",
+                        categoria   = doc.getString("categoria") ?: "",
+                        stock       = doc.getLong("stock")?.toInt() ?: 0
+                    )
+                } catch (e: Exception) {
+                    null
+                }
             }
             Result.success(plants)
         } catch (e: Exception) {
@@ -26,8 +39,21 @@ class PlantRepository {
             val snapshot = plantasRef
                 .whereEqualTo("categoria", categoria)
                 .get().await()
-            val plants = snapshot.documents.mapNotNull {
-                it.toObject(Plant::class.java)?.copy(plantaId = it.id)
+            val plants = snapshot.documents.mapNotNull { doc ->
+                try {
+                    Plant(
+                        plantaId    = doc.id,
+                        nombre      = doc.getString("nombre") ?: "",
+                        descripcion = doc.getString("descripcion") ?: "",
+                        cuidados    = doc.getString("cuidados") ?: "",
+                        precio      = doc.getDouble("precio") ?: 0.0,
+                        imagenUrl   = doc.getString("imagenUrl") ?: "",
+                        categoria   = doc.getString("categoria") ?: "",
+                        stock       = doc.getLong("stock")?.toInt() ?: 0
+                    )
+                } catch (e: Exception) {
+                    null
+                }
             }
             Result.success(plants)
         } catch (e: Exception) {
@@ -38,8 +64,19 @@ class PlantRepository {
     suspend fun getPlantById(plantaId: String): Result<Plant> {
         return try {
             val doc = plantasRef.document(plantaId).get().await()
-            val plant = doc.toObject(Plant::class.java)?.copy(plantaId = doc.id)
-                ?: return Result.failure(Exception("Planta no encontrada"))
+            if (!doc.exists()) {
+                return Result.failure(Exception("Planta no encontrada"))
+            }
+            val plant = Plant(
+                plantaId    = doc.id,
+                nombre      = doc.getString("nombre") ?: "",
+                descripcion = doc.getString("descripcion") ?: "",
+                cuidados    = doc.getString("cuidados") ?: "",
+                precio      = doc.getDouble("precio") ?: 0.0,
+                imagenUrl   = doc.getString("imagenUrl") ?: "",
+                categoria   = doc.getString("categoria") ?: "",
+                stock       = doc.getLong("stock")?.toInt() ?: 0
+            )
             Result.success(plant)
         } catch (e: Exception) {
             Result.failure(e)

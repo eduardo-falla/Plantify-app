@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_admin_dashboard"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Panel"/>
+    <item
+        android:id="@+id/nav_admin_plantas"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="Plantas"/>
+    <item
+        android:id="@+id/nav_admin_pedidos"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Pedidos"/>
+    <item
+        android:id="@+id/nav_admin_perfil"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Perfil"/>
+</menu>

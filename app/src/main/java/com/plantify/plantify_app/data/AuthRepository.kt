@@ -135,4 +135,25 @@ class AuthRepository {
         val doc = usuariosRef.document(uid).get().await()
         return doc.toObject(Usuario::class.java) ?: Usuario(uid = uid)
     }
+//Eliminar cuenta
+    suspend fun eliminarCuenta(uid: String): Result<Unit> {
+        return try {
+            // 1. Eliminar carrito
+            val cartItems = db.collection("users")
+                .document(uid)
+                .collection("cart")
+                .get().await()
+            cartItems.documents.forEach { it.reference.delete().await() }
+
+            // 2. Eliminar datos en Firestore
+            usuariosRef.document(uid).delete().await()
+
+            // 3. Eliminar cuenta de Firebase Auth
+            auth.currentUser?.delete()?.await()
+
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

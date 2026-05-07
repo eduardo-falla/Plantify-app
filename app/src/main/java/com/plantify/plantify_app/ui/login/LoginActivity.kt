@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputEditText
 import com.plantify.plantify_app.R
+import com.plantify.plantify_app.ui.admin.AdminActivity
 import com.plantify.plantify_app.ui.home.HomeActivity
 import com.plantify.plantify_app.ui.register.RegisterActivity
 
@@ -81,8 +82,13 @@ class LoginActivity : AppCompatActivity() {
 
         // 👁 Observar resultado
         viewModel.loginState.observe(this) { result ->
-            result.onSuccess {
-                startActivity(Intent(this, HomeActivity::class.java))
+            result.onSuccess { usuario ->
+                val intent = when (usuario.rol) {
+                    "admin" -> Intent(this, AdminActivity::class.java)
+                    else    -> Intent(this, HomeActivity::class.java)
+                }
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
                 finish()
             }
             result.onFailure {

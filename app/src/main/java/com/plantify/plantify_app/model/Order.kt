@@ -4,8 +4,10 @@ import com.google.firebase.firestore.ServerTimestamp
 import java.util.Date
 
 data class Order(
-    val orderId: String = "",
-    val userId: String = "",
+    val pedidoId: String = "",
+    val compradorId: String = "",
+    val compradorNombre: String = "",
+    val compradorEmail: String = "",
     val items: List<CartItem> = emptyList(),
     val total: Double = 0.0,
     val estado: String = "pendiente",

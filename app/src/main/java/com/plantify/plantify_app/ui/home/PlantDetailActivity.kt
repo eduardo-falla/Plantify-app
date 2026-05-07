@@ -10,13 +10,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.plantify.plantify_app.R
+import com.plantify.plantify_app.data.FavoritosRepository
 import com.plantify.plantify_app.model.CartItem
+import kotlinx.coroutines.launch
 
 class PlantDetailActivity : AppCompatActivity() {
 
     private val viewModel: PlantDetailViewModel by viewModels()
+    private val favoritosRepo = FavoritosRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +41,46 @@ class PlantDetailActivity : AppCompatActivity() {
         val tvStock       = findViewById<TextView>(R.id.tvStockDetail)
         val btnAgregar    = findViewById<Button>(R.id.btnAgregarCarrito)
         val btnBack       = findViewById<ImageButton>(R.id.btnBack)
+        val btnFavorito   = findViewById<ImageButton>(R.id.btnFavorito)
         val progressBar   = findViewById<ProgressBar>(R.id.progressBar)
 
-        // ── Botón volver — va aquí, FUERA del observer ────────
+        // ── Botón volver ──────────────────────────────────────
         btnBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+        }
+
+        // ── Botón favorito — verificar estado inicial ─────────
+        lifecycleScope.launch {
+            val esFav = favoritosRepo.esFavorito(plantaId)
+            btnFavorito.setImageResource(
+                if (esFav) android.R.drawable.btn_star_big_on
+                else       android.R.drawable.btn_star_big_off
+            )
+        }
+
+        btnFavorito.setOnClickListener {
+            lifecycleScope.launch {
+                val esFav = favoritosRepo.esFavorito(plantaId)
+                if (esFav) {
+                    favoritosRepo.quitarFavorito(plantaId)
+                    btnFavorito.setImageResource(android.R.drawable.btn_star_big_off)
+                    Toast.makeText(
+                        this@PlantDetailActivity,
+                        "Eliminado de favoritos",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    viewModel.plant.value?.let { plant ->
+                        favoritosRepo.agregarFavorito(plant)
+                        btnFavorito.setImageResource(android.R.drawable.btn_star_big_on)
+                        Toast.makeText(
+                            this@PlantDetailActivity,
+                            "Agregado a favoritos ❤️",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
 
         // ── Observers ─────────────────────────────────────────
@@ -63,8 +102,6 @@ class PlantDetailActivity : AppCompatActivity() {
         }
 
         viewModel.plant.observe(this) { plant ->
-
-            // Llenar vistas con datos
             tvNombre.text      = plant.nombre
             tvCategoria.text   = plant.categoria
             tvPrecio.text      = "S/ ${"%.2f".format(plant.precio)}"
@@ -75,19 +112,15 @@ class PlantDetailActivity : AppCompatActivity() {
             else
                 "❌ Sin stock"
 
-            // Habilitar o deshabilitar botón según stock
             btnAgregar.isEnabled = plant.stock > 0
             btnAgregar.alpha     = if (plant.stock > 0) 1f else 0.5f
 
-            // Imagen
             Glide.with(this)
                 .load(plant.imagenUrl)
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .centerCrop()
                 .into(ivPlant)
 
-            // ── Botón agregar — va DENTRO del observer
-            //    para tener acceso al objeto plant ya cargado ──
             btnAgregar.setOnClickListener {
                 if (plant.stock > 0) {
                     viewModel.addToCart(

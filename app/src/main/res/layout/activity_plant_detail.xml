@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <!-- Imagen con botón back encima -->
+    <!-- Imagen con botones encima -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="260dp">
@@ -19,16 +19,29 @@
             android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_gallery"/>
 
-        <!-- Botón volver -->
+        <!-- Botón volver — arriba izquierda -->
         <ImageButton
             android:id="@+id/btnBack"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="top|start"
             android:layout_margin="16dp"
             android:background="@drawable/bg_btn_back"
             android:src="@android:drawable/ic_media_previous"
             android:padding="8dp"
             android:contentDescription="Volver"/>
+
+        <!-- Botón favorito — arriba derecha -->
+        <ImageButton
+            android:id="@+id/btnFavorito"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_btn_back"
+            android:src="@android:drawable/btn_star_big_off"
+            android:padding="8dp"
+            android:contentDescription="Favorito"/>
 
         <!-- Loading -->
         <ProgressBar

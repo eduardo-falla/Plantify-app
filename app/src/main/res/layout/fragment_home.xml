@@ -16,40 +16,27 @@
         android:padding="24dp"
         app:layout_constraintTop_toTopOf="parent">
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvGreeting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:text="¡Hola!"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvGreeting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="¡Hola!"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Encuentra tu planta perfecta"
-                    android:textColor="@color/text_white_secondary"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:background="@android:color/transparent"
-                android:src="@android:drawable/ic_popup_reminder"
-                app:tint="@color/white" />
-        </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Encuentra tu planta perfecta"
+                android:textColor="@color/text_white_secondary"
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <!-- Barra de búsqueda clickeable -->
         <LinearLayout
@@ -93,7 +80,7 @@
             android:orientation="vertical"
             android:paddingBottom="20dp">
 
-            <!-- Banner de Oferta -->
+            <!-- Frase motivacional -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,44 +91,46 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_offer_banner"
+                    android:background="@color/green_dark"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="20dp"
+                    android:gravity="center">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="✨ Oferta Especial"
-                        android:textColor="@color/yellow_advice_bg"
-                        android:textStyle="bold" />
+                        android:text="🌿"
+                        android:textSize="28sp"
+                        android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="&quot;Cuidar una planta es aprender a ser paciente con la vida&quot;"
+                        android:textColor="#D8F3DC"
+                        android:textSize="13sp"
+                        android:fontFamily="serif"
+                        android:textStyle="italic"
+                        android:gravity="center"
+                        android:lineSpacingExtra="4dp"
+                        android:layout_marginBottom="10dp"/>
+
+                    <View
+                        android:layout_width="40dp"
+                        android:layout_height="2dp"
+                        android:background="#52B788"
+                        android:layout_marginBottom="8dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="30% de descuento"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="En plantas de interior seleccionadas"
-                        android:textColor="@color/text_white_secondary" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:backgroundTint="@color/white"
-                        android:text="Ver ofertas"
-                        android:textAllCaps="false"
-                        android:textColor="@color/green_primary" />
+                        android:text="Plantify — Tu tienda de plantas"
+                        android:textColor="#B2DFDB"
+                        android:textSize="11sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ══════ CHIPS DE CATEGORÍAS ══════ -->
+            <!-- Categorías -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -162,7 +151,7 @@
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
-            <!-- ══════ LOADING ══════ -->
+            <!-- Loading -->
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
@@ -172,7 +161,7 @@
                 android:indeterminateTint="@color/green_primary"
                 android:visibility="gone"/>
 
-            <!-- ══════ ESTADO VACÍO ══════ -->
+            <!-- Estado vacío -->
             <TextView
                 android:id="@+id/tvEmpty"
                 android:layout_width="match_parent"
@@ -184,7 +173,7 @@
                 android:textSize="15sp"
                 android:visibility="gone"/>
 
-            <!-- ══════ PLANTAS RECOMENDADAS ══════ -->
+            <!-- Plantas disponibles -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -210,7 +199,7 @@
                     android:focusable="true"/>
             </RelativeLayout>
 
-            <!-- RecyclerView plantas — ahora en GRID de 2 columnas -->
+            <!-- RecyclerView plantas -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvRecommended"
                 android:layout_width="match_parent"
