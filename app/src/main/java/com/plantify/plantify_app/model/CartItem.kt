@@ -5,5 +5,5 @@ data class CartItem(
     val nombre: String = "",
     val precio: Double = 0.0,
     val imagenUrl: String = "",
-    var quantity: Int = 1
-)
+    var cantidad: Int = 1
+) : java.io.Serializable

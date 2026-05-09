@@ -17,7 +17,14 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNombreRegister"
-            android:hint="Nombre completo"
+            android:hint="Nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etApellidoRegister"
+            android:hint="Apellido"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"/>
@@ -33,6 +40,14 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPasswordRegister"
             android:hint="Contraseña"
+            android:inputType="textPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etConfirmPasswordRegister"
+            android:hint="Repetir contraseña"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

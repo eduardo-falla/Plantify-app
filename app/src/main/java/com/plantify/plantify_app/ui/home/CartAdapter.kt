@@ -40,8 +40,8 @@ class CartAdapter(
 
         holder.tvName.text      = item.nombre
         holder.tvPrice.text     = "S/ ${"%.2f".format(item.precio)} c/u"
-        holder.tvQuantity.text  = item.quantity.toString()
-        holder.tvTotalItem.text = "S/ ${"%.2f".format(item.precio * item.quantity)}"
+        holder.tvQuantity.text  = item.cantidad.toString()
+        holder.tvTotalItem.text = "S/ ${"%.2f".format(item.precio * item.cantidad)}"
 
         Glide.with(holder.itemView.context)
             .load(item.imagenUrl)

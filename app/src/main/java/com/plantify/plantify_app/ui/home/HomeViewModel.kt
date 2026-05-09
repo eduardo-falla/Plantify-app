@@ -6,13 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.plantify.plantify_app.data.CartRepository
 import com.plantify.plantify_app.data.PlantRepository
+import com.plantify.plantify_app.data.FavoritoRepository
 import com.plantify.plantify_app.model.CartItem
 import com.plantify.plantify_app.model.Plant
 import kotlinx.coroutines.launch
 
+
 class HomeViewModel(
     private val plantRepository: PlantRepository = PlantRepository(),
-    private val cartRepository: CartRepository = CartRepository()
+    private val cartRepository: CartRepository = CartRepository(),
+    private val favoritoRepository: FavoritoRepository = FavoritoRepository()
 ) : ViewModel() {
 
     private val _plants = MutableLiveData<List<Plant>>()
@@ -29,7 +32,22 @@ class HomeViewModel(
             _isLoading.postValue(false)
         }
     }
-
+    fun addFavorito(plant: Plant) {
+        viewModelScope.launch {
+            favoritoRepository.addFavorito(plant)
+        }
+    }
+    fun getNombreUsuario(onResult: (String) -> Unit) {
+        val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid ?: return
+        com.google.firebase.firestore.FirebaseFirestore.getInstance()
+            .collection("usuarios")
+            .document(uid)
+            .get()
+            .addOnSuccessListener { doc ->
+                val nombre = doc.getString("nombre") ?: "Usuario"
+                onResult(nombre)
+            }
+    }
     fun addToCart(plant: Plant) {
         viewModelScope.launch {
             val item = CartItem(
@@ -41,7 +59,6 @@ class HomeViewModel(
             cartRepository.addItem(item)
         }
     }
-
     fun logout() {
         // Si tienes AuthRepository puedes llamarlo aquí
         com.google.firebase.auth.FirebaseAuth.getInstance().signOut()

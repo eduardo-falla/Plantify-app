@@ -46,6 +46,11 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+
+    // Generar QR
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     // ViewModel + Activity
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
@@ -54,6 +59,7 @@ dependencies {
 
     // Fragment
     implementation("androidx.fragment:fragment-ktx:1.8.5")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

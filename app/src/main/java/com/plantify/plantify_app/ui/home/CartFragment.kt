@@ -32,8 +32,8 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
 
         adapter = CartAdapter(
             items = emptyList(),
-            onIncrease = { item -> viewModel.updateQuantity(item.id, item.quantity + 1) },
-            onDecrease = { item -> viewModel.updateQuantity(item.id, item.quantity - 1) },
+            onIncrease = { item -> viewModel.updateQuantity(item.id, item.cantidad + 1) },
+            onDecrease = { item -> viewModel.updateQuantity(item.id, item.cantidad - 1) },
             onRemove   = { item -> viewModel.removeItem(item.id) }
         )
 
@@ -47,7 +47,7 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
             tvEmpty.visibility   = if (isEmpty) View.VISIBLE else View.GONE
             rvCart.visibility    = if (isEmpty) View.GONE else View.VISIBLE
 
-            val count = items.sumOf { it.quantity }
+            val count = items.sumOf { it.cantidad }
             tvCartCount.text = "$count ${if (count == 1) "artículo" else "artículos"}"
         }
 
@@ -62,7 +62,13 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         }
 
         btnCheckout.setOnClickListener {
-            // Aquí conectar el flujo de pago
+            val items = viewModel.cartItems.value ?: emptyList()
+            val subtotal = viewModel.total.value ?: 0.0
+            val totalConEnvio = subtotal + SHIPPING
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, PagoFragment.newInstance(totalConEnvio, items))
+                .addToBackStack(null)
+                .commit()
         }
 
         viewModel.loadCart()

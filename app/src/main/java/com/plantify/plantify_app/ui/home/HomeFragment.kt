@@ -24,6 +24,12 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
+        // Saludo con nombre del usuario
+        val tvGreeting = view.findViewById<TextView>(R.id.tvGreeting)
+        viewModel.getNombreUsuario { nombre ->
+            tvGreeting.text = "¡Hola, $nombre!"
+        }
+
         val tvVerTodo = view.findViewById<TextView>(R.id.tvVerTodo)
         tvVerTodo.setOnClickListener {
             (activity as? HomeActivity)?.navigateToSearch()
@@ -34,11 +40,32 @@ class HomeFragment : Fragment() {
             (activity as? HomeActivity)?.navigateToSearch()
         }
 
-        val rvRecommended = view.findViewById<RecyclerView>(R.id.rvRecommended)
-        adapter = PlantAdapter(emptyList()) { plant ->
-            viewModel.addToCart(plant)
-            Toast.makeText(requireContext(), "${plant.nombre} agregado al carrito 🌿", Toast.LENGTH_SHORT).show()
+        view.findViewById<View>(R.id.btnCategoriaOrnamentales).setOnClickListener {
+            (activity as? HomeActivity)?.navigateToSearch("Ornamental")
         }
+
+        view.findViewById<View>(R.id.btnCategoriaMedicinales).setOnClickListener {
+            (activity as? HomeActivity)?.navigateToSearch("Medicinal")
+        }
+
+        val rvRecommended = view.findViewById<RecyclerView>(R.id.rvRecommended)
+        adapter = PlantAdapter(
+            plants = emptyList(),
+            onAddToCart = { plant ->
+                viewModel.addToCart(plant)
+                Toast.makeText(requireContext(), "${plant.nombre} agregado al carrito 🌿", Toast.LENGTH_SHORT).show()
+            },
+            onFavorito = { plant ->
+                viewModel.addFavorito(plant)
+                Toast.makeText(requireContext(), "${plant.nombre} agregado a favoritos ❤️", Toast.LENGTH_SHORT).show()
+            },
+            onVerDetalle = { plant ->
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, PlantDetailFragment.newInstance(plant))
+                    .addToBackStack(null)
+                    .commit()
+            }
+        )
         rvRecommended.layoutManager = LinearLayoutManager(
             requireContext(), LinearLayoutManager.HORIZONTAL, false
         )

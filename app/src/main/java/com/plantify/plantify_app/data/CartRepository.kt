@@ -38,9 +38,9 @@ class CartRepository {
                 cartCollection().add(item).await()
             } else {
                 val doc = existing.documents.first()
-                val currentQty = doc.getLong("quantity")?.toInt() ?: 1
+                val currentQty = doc.getLong("cantidad")?.toInt() ?: 1
                 cartCollection().document(doc.id)
-                    .update("quantity", currentQty + 1).await()
+                    .update("cantidad", currentQty + 1).await()
             }
             Result.success(Unit)
         } catch (e: Exception) {
@@ -63,7 +63,7 @@ class CartRepository {
                 removeItem(itemId)
             } else {
                 cartCollection().document(itemId)
-                    .update("quantity", quantity).await()
+                    .update("cantidad", quantity).await()
             }
             Result.success(Unit)
         } catch (e: Exception) {

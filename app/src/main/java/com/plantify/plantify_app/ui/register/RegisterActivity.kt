@@ -20,31 +20,43 @@ class RegisterActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_register)
 
-        val etNombre   = findViewById<TextInputEditText>(R.id.etNombreRegister)
-        val etEmail    = findViewById<TextInputEditText>(R.id.etEmailRegister)
-        val etPassword = findViewById<TextInputEditText>(R.id.etPasswordRegister)
-        val btnRegister = findViewById<Button>(R.id.btnRegister)
+        val etNombre          = findViewById<TextInputEditText>(R.id.etNombreRegister)
+        val etApellido = findViewById<TextInputEditText>(R.id.etApellidoRegister)
+        val etEmail           = findViewById<TextInputEditText>(R.id.etEmailRegister)
+        val etPassword        = findViewById<TextInputEditText>(R.id.etPasswordRegister)
+        val etConfirmPassword = findViewById<TextInputEditText>(R.id.etConfirmPasswordRegister)
+        val btnRegister       = findViewById<Button>(R.id.btnRegister)
 
         btnRegister.setOnClickListener {
-            val nombre   = etNombre.text.toString().trim()
-            val email    = etEmail.text.toString().trim()
-            val password = etPassword.text.toString().trim()
+            val nombre          = etNombre.text.toString().trim()
+            val apellido = etApellido.text.toString().trim()
+            val email           = etEmail.text.toString().trim()
+            val password        = etPassword.text.toString()
+            val confirmPassword = etConfirmPassword.text.toString()
 
-            if (nombre.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                viewModel.register(email, password, nombre)
-            } else {
-                Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+            when {
+                nombre.isEmpty() || apellido.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() -> {
+                    Toast.makeText(this, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+                }
+                password != confirmPassword -> {
+                    etConfirmPassword.error = "Las contraseñas no coinciden"
+                }
+                password.length < 6 -> {
+                    etPassword.error = "La contraseña debe tener al menos 6 caracteres"
+                }
+                else -> {
+                    viewModel.register(email, password, nombre, apellido)
+                }
             }
         }
 
         viewModel.registerState.observe(this) { result ->
-            result.onSuccess {
+            if (result.isSuccess) {
                 Toast.makeText(this, "Usuario registrado correctamente", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, LoginActivity::class.java))
                 finish()
-            }
-            result.onFailure { e ->
-                Toast.makeText(this, "Error al registrar: ${e.message}", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Error al registrar: ${result.exceptionOrNull()?.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -24,7 +24,7 @@ class AuthRepository {
     }
 
     // 🆕 nombre como parámetro
-    suspend fun register(email: String, password: String, nombre: String): Result<Usuario> {
+    suspend fun register(email: String, password: String, nombre: String, apellido: String): Result<Usuario> {
         return try {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
             val firebaseUser = result.user!!
@@ -32,6 +32,7 @@ class AuthRepository {
                 uid = firebaseUser.uid,
                 email = firebaseUser.email ?: "",
                 nombre = nombre,
+                apellido = apellido,
                 fotoPerfil = "",
                 rol = "comprador"
             )

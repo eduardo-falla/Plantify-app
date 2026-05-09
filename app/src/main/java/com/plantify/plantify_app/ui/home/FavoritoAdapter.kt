@@ -3,7 +3,6 @@ package com.plantify.plantify_app.ui.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,28 +11,25 @@ import com.bumptech.glide.Glide
 import com.plantify.plantify_app.R
 import com.plantify.plantify_app.model.Plant
 
-class PlantAdapter(
+class FavoritoAdapter(
     private var plants: List<Plant>,
-    private val onAddToCart: (Plant) -> Unit,
-    private val onFavorito: (Plant) -> Unit,
-    private val onVerDetalle: (Plant) -> Unit
-) : RecyclerView.Adapter<PlantAdapter.PlantViewHolder>() {
+    private val onRemove: (Plant) -> Unit
+) : RecyclerView.Adapter<FavoritoAdapter.FavoritoViewHolder>() {
 
-    class PlantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val ivPlant: ImageView       = view.findViewById(R.id.ivPlantImage)
-        val tvName: TextView         = view.findViewById(R.id.tvPlantName)
-        val tvPrice: TextView        = view.findViewById(R.id.tvPrice)
-        val btnAdd: Button           = view.findViewById(R.id.btnAddToCart)
+    class FavoritoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val ivPlant: ImageView    = view.findViewById(R.id.ivPlantImage)
+        val tvName: TextView      = view.findViewById(R.id.tvPlantName)
+        val tvPrice: TextView     = view.findViewById(R.id.tvPrice)
         val btnFavorito: ImageButton = view.findViewById(R.id.btnFavorito)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlantViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavoritoViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_plant_card, parent, false)
-        return PlantViewHolder(view)
+            .inflate(R.layout.item_plant_fav, parent, false)
+        return FavoritoViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: PlantViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: FavoritoViewHolder, position: Int) {
         val plant = plants[position]
         holder.tvName.text  = plant.nombre
         holder.tvPrice.text = "S/ ${"%.2f".format(plant.precio)}"
@@ -44,9 +40,7 @@ class PlantAdapter(
             .centerCrop()
             .into(holder.ivPlant)
 
-        holder.itemView.setOnClickListener { onVerDetalle(plant) }
-        holder.btnAdd.setOnClickListener   { onAddToCart(plant) }
-        holder.btnFavorito.setOnClickListener { onFavorito(plant) }
+        holder.btnFavorito.setOnClickListener { onRemove(plant) }
     }
 
     override fun getItemCount() = plants.size

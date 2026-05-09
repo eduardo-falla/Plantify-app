@@ -16,9 +16,9 @@ class RegisterViewModel : ViewModel() {
     val registerState: LiveData<Result<Usuario>> = _registerState
 
     // 🆕 nombre como parámetro
-    fun register(email: String, password: String, nombre: String) {
+    fun register(email: String, password: String, nombre: String, apellido: String) {
         viewModelScope.launch {
-            _registerState.value = repository.register(email, password, nombre)
+            _registerState.value = repository.register(email, password, nombre, apellido)
         }
     }
 }

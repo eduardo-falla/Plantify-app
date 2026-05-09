@@ -20,29 +20,20 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNavigation = findViewById(R.id.bottomNavigation)
 
-        // Cargar fragment inicial (Inicio)
         if (savedInstanceState == null) {
             loadFragment(HomeFragment())
         }
 
+        setupBottomNavListener()
+    }
+
+    private fun setupBottomNavListener() {
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.navigation_home -> {
-                    loadFragment(HomeFragment())
-                    true
-                }
-                R.id.navigation_search -> {
-                    loadFragment(SearchFragment())
-                    true
-                }
-                R.id.navigation_cart -> {
-                    loadFragment(CartFragment())
-                    true
-                }
-                R.id.navigation_profile -> {
-                    loadFragment(ProfileFragment())
-                    true
-                }
+                R.id.navigation_home   -> { loadFragment(HomeFragment()); true }
+                R.id.navigation_search -> { loadFragment(SearchFragment()); true }
+                R.id.navigation_cart   -> { loadFragment(CartFragment()); true }
+                R.id.navigation_profile -> { loadFragment(ProfileFragment()); true }
                 else -> false
             }
         }
@@ -54,9 +45,21 @@ class HomeActivity : AppCompatActivity() {
             .commit()
     }
 
-    // Método para navegar a Buscar desde otros fragments
-    fun navigateToSearch() {
+    fun navigateToSearch(categoria: String = "") {
+        val fragment = SearchFragment().apply {
+            arguments = Bundle().apply {
+                putString("categoria", categoria)
+            }
+        }
+        // Desactiva el listener para que no pise el fragment con categoría
+        bottomNavigation.setOnItemSelectedListener(null)
         bottomNavigation.selectedItemId = R.id.navigation_search
+        // Carga el fragment con la categoría
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
+        // Restaura el listener
+        setupBottomNavListener()
     }
 
     fun logout() {

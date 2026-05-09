@@ -7,6 +7,5 @@ data class Plant(
     val cuidados: String = "",
     val precio: Double = 0.0,
     val imagenUrl: String = "",
-    val categoria: String = "",
-    val vendedorId: String = ""
+    val categoria: String = ""
 )
